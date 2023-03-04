@@ -1,0 +1,229 @@
+#include<bits/stdc++.h>
+#include <sys/time.h>
+int counti=0;
+using namespace std;
+void swap(int *xp, int *yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+    int nitin=0;
+}
+void insertionSort(int arr[], int n)
+{
+    counti=0;
+    int i, key, j;
+    for (i = 1; i < n; i++)
+    {
+        key = arr[i];
+        j = i - 1;
+
+        // Move elements of arr[0..i-1],
+        // that are greater than key, to one
+        // position ahead of their
+        // current position
+
+        while (j >= 0 && arr[j] > key)
+        {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+            counti++;
+        }counti++;
+        arr[j + 1] = key;
+    }
+    cout<<"\nnumber of comparisions takes place in insertion sort are"<<counti<<endl;
+}
+
+void bubbleSort(int arr[], int n)
+{
+    counti=0;
+    int i, j;
+    for (i = 0; i < n - 1; i++){
+
+        // Last i elements are already in place
+        for (j = 0; j < n - i - 1; j++){
+            counti++;
+            if (arr[j] > arr[j + 1]){
+                swap(&arr[j], &arr[j + 1]);
+
+            }
+        }
+    }
+    cout<<"\nnumber of comparisions takes place in bubble sort are"<<counti<<endl;
+}
+void selectionSort(int arr[], int n)
+{
+    counti=0;
+    int i, j, min_idx;
+
+    // One by one move boundary of
+    // unsorted subarray
+    for (i = 0; i < n-1; i++)
+    {
+
+        // Find the minimum element in
+        // unsorted array
+        min_idx = i;
+        for (j = i+1; j < n; j++){
+            counti++;
+        if (arr[j] < arr[min_idx])
+            min_idx = j;
+
+        // Swap the found minimum element
+        // with the first element
+        if(min_idx!=i)
+            swap(&arr[min_idx], &arr[i]);
+        }
+
+    }
+    cout<<"\nNumber of comparisions takes place in selection Sort are "<<counti;
+}
+
+
+void merge(int array[], int const left, int const mid,
+           int const right)
+{
+    int const subArrayOne = mid - left + 1;
+    int const subArrayTwo = right - mid;
+
+    // Create temp arrays
+    int *leftArray = new int[subArrayOne],
+         *rightArray = new int[subArrayTwo];
+
+    // Copy data to temp arrays leftArray[] and rightArray[]
+    for (int i = 0; i < subArrayOne; i++)
+        leftArray[i] = array[left + i];
+    for (int  j = 0; j < subArrayTwo; j++)
+        rightArray[j] = array[mid + 1 + j];
+
+    int indexOfSubArrayOne
+        = 0, // Initial index of first sub-array
+        indexOfSubArrayTwo
+        = 0; // Initial index of second sub-array
+    int indexOfMergedArray
+        = left; // Initial index of merged array
+
+    // Merge the temp arrays back into array[left..right]
+    while (indexOfSubArrayOne < subArrayOne
+           && indexOfSubArrayTwo < subArrayTwo) {
+            counti++;
+        if (leftArray[indexOfSubArrayOne]
+            <= rightArray[indexOfSubArrayTwo]) {
+            array[indexOfMergedArray]
+                = leftArray[indexOfSubArrayOne];
+            indexOfSubArrayOne++;
+        }
+        else {
+            array[indexOfMergedArray]
+                = rightArray[indexOfSubArrayTwo];
+            indexOfSubArrayTwo++;
+        }
+        indexOfMergedArray++;
+    }
+    // Copy the remaining elements of
+    // left[], if there are any
+    while (indexOfSubArrayOne < subArrayOne) {
+        array[indexOfMergedArray]
+            = leftArray[indexOfSubArrayOne];
+        indexOfSubArrayOne++;
+        indexOfMergedArray++;
+    }
+    // Copy the remaining elements of
+    // right[], if there are any
+    while (indexOfSubArrayTwo < subArrayTwo) {
+        array[indexOfMergedArray]
+            = rightArray[indexOfSubArrayTwo];
+        indexOfSubArrayTwo++;
+        indexOfMergedArray++;
+    }
+    delete[] leftArray;
+    delete[] rightArray;
+}
+
+// begin is for left index and end is
+// right index of the sub-array
+// of arr to be sorted */
+void mergeSort(int array[], int const begin, int const end)
+{
+    if (begin >= end)
+        return; // Returns recursively
+
+    int mid = begin + (end - begin) / 2;
+    mergeSort(array, begin, mid);
+    mergeSort(array, mid + 1, end);
+    merge(array, begin, mid, end);
+}
+
+
+
+int partition(int arr[], int low, int high)
+{
+    int pivot = arr[high]; // pivot
+    int i
+        = (low
+           - 1); // Index of smaller element and indicates
+                 // the right position of pivot found so far
+
+    for (int j = low; j <= high - 1; j++) {
+        // If current element is smaller than the pivot
+        counti++;
+        if (arr[j] < pivot) {
+            i++; // increment index of smaller element
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+/* The main function that implements QuickSort
+arr[] --> Array to be sorted,
+low --> Starting index,
+high --> Ending index */
+void quickSort(int arr[], int low, int high)
+{
+    if (low < high) {
+        /* pi is partitioning index, arr[p] is now
+        at right place */
+        int pi = partition(arr, low, high);
+        // Separately sort elements before
+        // partition and after partition
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+
+int main(){
+int arr[5]={41,67,34,0,69};
+struct timeval stop, start;
+gettimeofday(&start, NULL);
+insertionSort(arr,5);
+gettimeofday(&stop, NULL);
+cout<<"\nTime taken by insertion sort"<<(stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec<<" us";
+int arr1[5]={41,67,34,0,69};
+gettimeofday(&start, NULL);
+bubbleSort(arr1,5);
+gettimeofday(&stop, NULL);
+cout<<"\nTime taken by bubble sort"<<(stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec<<" us";
+int arr2[5]={41,67,34,0,69};
+gettimeofday(&start, NULL);
+selectionSort(arr2,5);
+gettimeofday(&stop, NULL);
+cout<<"\nTime taken by selection sort"<<(stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec<<" us";
+int arr3[5]={41,67,34,0,69};
+counti=0;
+gettimeofday(&start, NULL);
+mergeSort(arr3,0,4);
+gettimeofday(&stop, NULL);
+cout<<"\nNumber of comparisions takes place in merge Sort are "<<counti;
+cout<<"\nTime taken by merge sort"<<(stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec<<" us";
+int arr4[5]={41,67,34,0,69};
+counti=0;
+gettimeofday(&start, NULL);
+quickSort(arr4,0,4);
+gettimeofday(&stop, NULL);
+cout<<"\nNumber of comparisions takes place in quick Sort are "<<counti;
+cout<<"\nTime taken by quick sort"<<(stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec<<" us";
+return 0;
+}
